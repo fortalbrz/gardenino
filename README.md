@@ -24,7 +24,7 @@ communicate with Home Assistant using MQTT and act as bridge (like "man-in-the-m
 Nano using plain serial communication. 
 
 
-![communication diagram](https://github.com/fortalbrz/gardenino/nano+esp01/blob/main/genreal_schema_001.png?raw=true)
+![communication diagram](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/general_schema_001.png?raw=true)
 
 Therefore, to use serial communication on this sketch to debug with "Serial Monitor" set the macro
 "*DEBUG_MODE true*", otherwise the serial communication is intended to ESP-01 module itself. 
@@ -54,7 +54,7 @@ Drivers (CH340g) for both Arduino Nano and ESP-01:
 
 ## Circuit Wiring Instruction (step by step):
 
-![wiring diagram](https://github.com/fortalbrz/gardenino/nano+esp01/blob/main/wiring_schema_001?raw=true)
+![wiring diagram](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/wiring_schema_001.png?raw=true)
  
 - [circuito.io (step by step)](https://www.circuito.io/app?components=514,11022,13322,13678,821989)
    - Arduino Nano pin29 (GND) --> power supply 5vdc (negative/Gnd)
