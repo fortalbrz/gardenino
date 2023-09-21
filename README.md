@@ -13,10 +13,10 @@ using *home assistant* with *MQTT* protocol (e.g., *mosquitto broker*) or autono
 
 ## Features:
  - works with home assistant to control garden watering and more 7 switches (MQTT), lights, *etc*
- - alternatively, works autonomous with up to 50 programmable timers (using real time clock - *optional, see [config flags](###Configuration flags)*)
- - soil moisture sensor to (avoids watering when the soil is wet - *optional, see [config flags](###Configuration flags)*)
- - watering watchdog (prevents watering for long time... :potable_water: - *optional, see [config flags](###Configuration flags)*)   
- - turn on/off watering with local push button (*optional, see [config flags](###Configuration flags)*)
+ - alternatively, works autonomous with up to 50 programmable timers (using real time clock - *optional, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
+ - soil moisture sensor to (avoids watering when the soil is wet - *optional, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
+ - watering watchdog (prevents watering for long time... :potable_water: - *optional, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)   
+ - turn on/off watering with local push button (*optional, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
 
 
 ### Plain Arduino Nano and WiFi?
@@ -32,7 +32,7 @@ Nano using plain serial communication.
 ![communication diagram](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/general_schema_001.png?raw=true)
 
 Therefore, to use serial communication on this sketch to debug with "Serial Monitor" set the flag macro
-"*[DEBUG_MODE true](###Configuration flags)*", otherwise the serial communication is intended to ESP-01 module itself. 
+"*[DEBUG_MODE true](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*", otherwise the serial communication is intended to ESP-01 module itself. 
 
 
 ## Source code:
@@ -71,13 +71,13 @@ and features to your needs...
 ## Materials:
 - Arduino Nano R3 (ATmega328P)
 - Wifi Module ESP8266-01 (ESP-01)
-- [ESP8266 USB serial adapter CH340g](https://produto.mercadolivre.com.br/MLB-2052186432-esp-01-wifi-esp8266-adaptador-usb-serial-ch340g-arduino-_JM) (see [next session](###Programming the ESP8266-01 (ESP-01)))
-- Logic Level Converter (LLC) 5v-3.3v (bi-directional) (*see [note](###Logic Level Converter (LLC))*)
-- Real Time Clock (RTC) DS3231 (*optional: uses for standalone timers support, see [config flags](###Configuration flags)*)
+- [ESP8266 USB serial adapter CH340g](https://produto.mercadolivre.com.br/MLB-2052186432-esp-01-wifi-esp8266-adaptador-usb-serial-ch340g-arduino-_JM) (see [next session](https://github.com/fortalbrz/gardenino/edit/main/README.md#programming-the-esp8266-01-esp-01))
+- Logic Level Converter (LLC) 5v-3.3v (bi-directional) (*see [note](https://github.com/fortalbrz/gardenino/edit/main/README.md#logic-level-converter-llc)*)
+- Real Time Clock (RTC) DS3231 (*optional: uses for standalone timers support, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
 - solenoid valve 3/4" 110 v (normally closed)
-- relay module 5v 8-ch (*optional: less than 8 channels can be used, see [config flags](###Configuration flags)*)
-- soil moisture sensor (*optional: avoids watering when the soil is wet, see [config flags](###Configuration flags)*)
-- push button and 10 k ohms resistor (*optional: turn on/off watering, see [config flags](###Configuration flags)*)
+- relay module 5v 8-ch (*optional: less than 8 channels can be used, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
+- soil moisture sensor (*optional: avoids watering when the soil is wet, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
+- push button and 10 k ohms resistor (*optional: turn on/off watering, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
 - power supply 5vdc (1A)
 
 ### Programming the ESP8266-01 (ESP-01)
@@ -150,9 +150,9 @@ See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZq
   - "*reset*": reset internal states
   - "*relays on/off*": turn on/off all relays
   - "*enable/disable timers*": enables/disables relay timers routine (avoid execution with out delete/update)
-  - "*enable/disable timer: 04*": disable timer by "*id*" (see states for gets "*timer id*")
-  - "*add timer: relay hh mm hh mm*": adds new relay timer (*relay number, turn on hour, turn on minute, turn off hour, turn off minute*)
-  - "*update timer: id hh mm hh mm*": updates relay timer by "*id*" (*id, turn on hour, turn on minute, turn off hour, turn off minute*)
+  - "*enable/disable timer: 04*": disable timer by "*id*" (checks MQTT state topic for gets to "*timer id*")
+  - "*add timer: relay hh mm hh mm*": adds new relay timer (parameters: *relay number, turn on hour, turn on minute, turn off hour, turn off minute*)
+  - "*update timer: id hh mm hh mm*": updates relay timer by "*id*" (parameters: *timer id, turn on hour, turn on minute, turn off hour, turn off minute*)
   - "*delete timer: 04*": delete timer by "*id*"
   - "*delete all timers*": deletes all relay timers (**warning**: *all timers will be erased!*)
   - "*default timers*": sets default relay timers (i.e. timers "*factory reset*", **warning**: *all timers will be erased!*)
