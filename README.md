@@ -4,7 +4,7 @@
 **Optimized for Arduino Nano R3 (ATmega328P)** 
 
 I made this project to make use of an old 8 channels relay board with a single Arduino Nano and 
-a really low cost *ESP-01* module... :) The goal is to control my garden irrigation, lights, etc, 
+a really low cost *ESP-01* module... :grin: The goal is to control my garden irrigation, lights, etc, 
 using *home assistant* with *MQTT* protocol (e.g., *mosquitto broker*) or autonomous with some 
 "standalone" intelligence on Arduino Nano. Sure you can use a plain Arduino relay module instead :smiley:
 (with any number of channels, with maximum of 8)...
@@ -12,17 +12,17 @@ using *home assistant* with *MQTT* protocol (e.g., *mosquitto broker*) or autono
 ![project resources](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_001.jpg?raw=true)
 
 ## Features:
- - works with home assistant to control garden watering and more 7 switches (MQTT), lights, etc
- - alternatively, works autonomous with up to 200 programmable timers (using real time clock - optional, use config flags)
- - soil moisture sensor to (avoids watering when the soil is wet - optional, use config flags)
- - watering watchdog (prevents watering for long time... - optional, use config flags)   
- - turn on/off watering with local push button (optional, use config flags)
+ - works with home assistant to control garden watering and more 7 switches (MQTT), lights, *etc*
+ - alternatively, works autonomous with up to 50 programmable timers (using real time clock - *optional, see [config flags](###Configuration flags)*)
+ - soil moisture sensor to (avoids watering when the soil is wet - *optional, see [config flags](###Configuration flags)*)
+ - watering watchdog (prevents watering for long time... :potable_water: - *optional, see [config flags](###Configuration flags)*)   
+ - turn on/off watering with local push button (*optional, see [config flags](###Configuration flags)*)
 
 
 ### Plain Arduino Nano and WiFi?
 
 However, Arduino Nano is not easy integrated with Wifi (I could have used a NodeMCU instead, 
-but I already got this Nano and plain ESP-01 module... And after all, what's the fun? kkk). 
+but I already got this Nano and plain ESP-01 module... And after all, what's the fun?  :zany_face:  kkk). 
 
 To solve this issue, I made a sketch apart to be flashed on the *ESP8266-01* module ([esp8266-01.ino](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/esp8266-01/esp8266-01.ino))
 (using board "*Generic ESP8266 Module*"). The ESP-01 should communicate with Home Assistant using MQTT and act as bridge (like "*man-in-the-middle*") to Arduino 
@@ -31,31 +31,53 @@ Nano using plain serial communication.
 
 ![communication diagram](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/general_schema_001.png?raw=true)
 
-Therefore, to use serial communication on this sketch to debug with "Serial Monitor" set the macro
-"*DEBUG_MODE true*", otherwise the serial communication is intended to ESP-01 module itself. 
-
-*NOTICE*: that this sketch should be pushed into an Arduino board (Board "Arduino Nano") using the 
-ATmega328P (Processor: "ATmega328P (Old Bootloader)").
+Therefore, to use serial communication on this sketch to debug with "Serial Monitor" set the flag macro
+"*[DEBUG_MODE true](###Configuration flags)*", otherwise the serial communication is intended to ESP-01 module itself. 
 
 
 ## Source code:
 - https://github.com/fortalbrz/gardenino
 
-Drivers (CH340g) for both Arduino Nano and ESP-01:
+**Drivers (CH340g)** for both Arduino Nano and ESP-01:
 - [CH340g USB/Serial driver](https://bit.ly/44WdzVF) (windows 11 compatible driver)  
 - driver install instructions ([pt-BR](https://bit.ly/3ZqIqc0))
 - flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZqT)) 
 
+*REMARK*: this sketch should be pushed into an Arduino Nano board using the *ATmega328P* processor at Arduino IDE:
+ - **Board**: "*Arduino Nano*"
+ - **Processor**: "*ATmega328P (Old Bootloader)*"
+
+
+### Configuration flags
+  
+Use this configurations flags to set gardeino behaviour (if you wish). You can avoid dispensable hardware 
+and features to your needs...
+
+| macro                      | default | description                                                                       |
+|----------------------------|---------|-----------------------------------------------------------------------------------|
+| RELAY_SIZE                 | 8       | number of relays (valid: 1 to 8)                                                  |
+| USE_RELAY_TIMERS           | true    | true to use timers, false otherwise - dont need the RTC                           | 
+| MAX_NUMBER_OF_TIMERS       | 50      | maximum number of standalone timers (valid: 3 to 200)                             |
+| USE_MOISTURE_SENSOR        | true    | true to use moisture sensor, false otherwise - dont need the moisture sensor      | 
+| SOIL_WET                   | 450     | defines max soil conductivity value we consider soil "wet" (valid: 0 to 1023)     |
+| SOIL_DRY                   | 750     | defines min soil conductivity value we consider soil "dry" (valid: 0 to 1023)     |
+| USE_WATERING_BUTTON        | true    | true to use push button, false otherwise - dont need the push button              |
+| USE_WATERING_WATCHDOG      | true    | true to set a watering time limit, false otherwise                                |
+| WATERING_WATCHDOG_INTERVAL | 300000  | watering time limit (milisseconds)                                                | 
+| BAUD_RATE                  | 9600    | serial communication speed with ESP-01 (adjust both sketches)                     |
+| DEBUG_MODE                 | false   | true to debug on serial monitor (debug), false to communicate with ESP-01 (prod)  |
+
+
 ## Materials:
 - Arduino Nano R3 (ATmega328P)
 - Wifi Module ESP8266-01 (ESP-01)
-- [ESP8266 USB serial adapter CH340g](https://produto.mercadolivre.com.br/MLB-2052186432-esp-01-wifi-esp8266-adaptador-usb-serial-ch340g-arduino-_JM)
-- Logic Level Converter (LLC) 5v-3.3v (bi-directional)
-- Real Time Clock (RTC) DS3231 (*optional: standalone timers support*)
+- [ESP8266 USB serial adapter CH340g](https://produto.mercadolivre.com.br/MLB-2052186432-esp-01-wifi-esp8266-adaptador-usb-serial-ch340g-arduino-_JM) (see [next session](###Programming the ESP8266-01 (ESP-01)))
+- Logic Level Converter (LLC) 5v-3.3v (bi-directional) (*see [note](###Logic Level Converter (LLC))*)
+- Real Time Clock (RTC) DS3231 (*optional: uses for standalone timers support, see [config flags](###Configuration flags)*)
 - solenoid valve 3/4" 110 v (normally closed)
-- relay module 5v 8-ch (*optional: less that 8 channels can be used*)
-- soil moisture sensor (*optional: avoids watering when the soil is wet*)
-- push button and 10 k ohms resistor (*optional: turn on/off watering*)
+- relay module 5v 8-ch (*optional: less than 8 channels can be used, see [config flags](###Configuration flags)*)
+- soil moisture sensor (*optional: avoids watering when the soil is wet, see [config flags](###Configuration flags)*)
+- push button and 10 k ohms resistor (*optional: turn on/off watering, see [config flags](###Configuration flags)*)
 - power supply 5vdc (1A)
 
 ### Programming the ESP8266-01 (ESP-01)
@@ -65,18 +87,17 @@ using [ESP8266 USB serial adapter CH340g](https://produto.mercadolivre.com.br/ML
 
 ![ESP8266 USB serial adapter](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_002.jpg?raw=true)
 
-One "*detail*" is that this USB/serial adapter can connect ESP-01 to USB (Arduino IDE), but **CAN'T** flash it. 
-In order to program the ESP-01, a small modification is needed: add a push button over GPIO and GND pins.
+One "*detail*" is that this USB/serial adapter can connect ESP-01 to USB (Arduino IDE), but **CAN'T** flash it :dizzy_face:. 
+In order to program the ESP-01, a small modification is needed: add a push button over GPIO and GND pins :sunglasses:.
 
 ![ESP8266 USB serial adapter modification](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_003.jpg?raw=true)
 
 
 ![ESP8266 USB serial adapter modification](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_004.jpg?raw=true)
  
-In order to write the code, press the button when connecting the USB Adapter to your computer's USB port.
+In order to write the code, press the button when connecting the USB Adapter to your computer's USB port :nerd_face:.
 
 See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZqT)) 
-
 
 ## Circuit Wiring Instruction (step by step):
 
@@ -158,7 +179,7 @@ See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZq
           },   
        }
   ```
-- **ha/datetime**: (*optional*) creates a automation on home assistant in order to synchronize data & time
+- **ha/datetime**: (*optional*) creates a automation on home assistant in order to synchronize data & time :nerd_face:
   ```   
            alias: MQTT date time sync
            description: "syncronize data & time on client MQTT devices"
@@ -177,7 +198,12 @@ See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZq
   ```
 
 ### Esp-Arduino "internal serial protocol": 
+
+This is a code detail just for documentation purposes
+
 #### protocol commands (ESP-01 -> Arduino Nano)
+
+ These are the codes send from ESP-01 to Arduino Nano (as single bytes) (mostly as response to MQTT topic **gardenino/cmd**):
 
 | code | minemonic          | MQTT topic cmd | description                                                                                   |
 |------|--------------------|----------------|-----------------------------------------------------------------------------------------------|
@@ -218,6 +244,9 @@ See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZq
 
 
 #### Arduino States (Arduino Nano -> ESP-01)
+
+These are the payloads send back from Arduino Nano to ESP-01 (mostly as response to MQTT topic **gardenino/state**):
+
 - 1st byte: START token (START - 0xFE)
 - 2nd byte: gardeino states
   - bit 0 - timers enabled
@@ -238,7 +267,7 @@ See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZq
   - end hour in range [00-23]
   - end minute in range [00-59]
 
-##### REMARK: debug routines (DEBUG_MODE true) commands:
+##### REMARK: debugging routines (DEBUG_MODE true) commands:
   - "mem"
   - "reset"
   - "sync"
@@ -251,6 +280,21 @@ See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZq
   - "delete timer"
   - "delete all timers"
   - "default timers"
+
+
+## Final notes
+
+### Logic Level Converter (LLC)
+
+Logic Level Converter (LLC) 5v-3.3v is not required if you make voltage divider (5v to 3.3v) for the RX serial communication.
+
+In order to do that, all you will need is a 1k ohms and a 2.2k ohms resistors, and make these circuit changes:   
+
+- 2.2k ohms resistor (terminal 1) --> Arduino Nano pin29 (GND)
+- 2.2k ohms resistor (terminal 2) --> ESP8266-01 pin8 (RXD)
+- 2.2k ohms resistor (terminal 2) --> 1k ohms resistor (terminal 1)
+- 1k ohms resistor (terminal 1) --> Arduino Nano pin14 (D11) 
+
 
 
 *[Jorge Albuquerque](mailto:jorgealbuquerque@gmail.com) (2022)*
