@@ -1,12 +1,15 @@
 # GARDEN.INO 
-## Garden Wifi with Home Assistant and a single Arduino Nano
+## :house_with_garden: Garden Wifi with Home Assistant and a single Arduino Nano 
 
 **Optimized for Arduino Nano R3 (ATmega328P)** 
 
 I made this project to make use of an old 8 channels relay board with a single Arduino Nano and 
-a really low cost ESP-02 module... :) The goal is to control irrigation, lights, etc at garden 
-using home assistant with MQTT protocol (e.g. mosquitto broker) or autonomous with some 
-"standalone" intelligence on Arduino Nano.
+a really low cost *ESP-01* module... :) The goal is to control my garden irrigation, lights, etc, 
+using *home assistant* with *MQTT* protocol (e.g., *mosquitto broker*) or autonomous with some 
+"standalone" intelligence on Arduino Nano. Sure you can use a plain Arduino relay module instead :smiley:
+(with any number of channels, with maximum of 8)...
+
+![project resources](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_001.jpg?raw=true)
 
 ## Features:
  - works with home assistant to control garden watering and more 7 switches (MQTT), lights, etc
@@ -16,11 +19,13 @@ using home assistant with MQTT protocol (e.g. mosquitto broker) or autonomous wi
  - turn on/off watering with local push button (optional, use config flags)
 
 
+### Plain Arduino Nano and WiFi?
+
 However, Arduino Nano is not easy integrated with Wifi (I could have used a NodeMCU instead, 
 but I already got this Nano and plain ESP-01 module... And after all, what's the fun? kkk). 
-To solve this issue, I made a sketch apart to be flashed on the ESP8266-01 module (*esp8266-01.ino*)
-(using board "Generic ESP8266 Module"), using the USB serial adapter CH340g. The ESP-01 should 
-communicate with Home Assistant using MQTT and act as bridge (like "man-in-the-middle") to Arduino 
+
+To solve this issue, I made a sketch apart to be flashed on the *ESP8266-01* module ([esp8266-01.ino](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/esp8266-01/esp8266-01.ino))
+(using board "*Generic ESP8266 Module*"). The ESP-01 should communicate with Home Assistant using MQTT and act as bridge (like "*man-in-the-middle*") to Arduino 
 Nano using plain serial communication. 
 
 
@@ -31,6 +36,7 @@ Therefore, to use serial communication on this sketch to debug with "Serial Moni
 
 *NOTICE*: that this sketch should be pushed into an Arduino board (Board "Arduino Nano") using the 
 ATmega328P (Processor: "ATmega328P (Old Bootloader)").
+
 
 ## Source code:
 - https://github.com/fortalbrz/gardenino
@@ -51,6 +57,26 @@ Drivers (CH340g) for both Arduino Nano and ESP-01:
 - soil moisture sensor (*optional: avoids watering when the soil is wet*)
 - push button and 10 k ohms resistor (*optional: turn on/off watering*)
 - power supply 5vdc (1A)
+
+### Programming the ESP8266-01 (ESP-01)
+
+The ESP-01 module should be programed with the sketch ([esp8266-01.ino](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/esp8266-01/esp8266-01.ino)), 
+using [ESP8266 USB serial adapter CH340g](https://produto.mercadolivre.com.br/MLB-2052186432-esp-01-wifi-esp8266-adaptador-usb-serial-ch340g-arduino-_JM) as show bellow:
+
+![ESP8266 USB serial adapter](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_002.jpg?raw=true)
+
+One "*detail*" is that this USB/serial adapter can connect ESP-01 to USB (Arduino IDE), but **CAN'T** flash it. 
+In order to program the ESP-01, a small modification is needed: add a push button over GPIO and GND pins.
+
+![ESP8266 USB serial adapter modification](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_003.jpg?raw=true)
+
+
+![ESP8266 USB serial adapter modification](https://github.com/fortalbrz/gardenino/blob/main/nano%2Besp01/project_004.jpg?raw=true)
+ 
+In order to write the code, press the button when connecting the USB Adapter to your computer's USB port.
+
+See more details in this flashing ESP-01 tutorial ([pt-BR](https://bit.ly/3LRlZqT)) 
+
 
 ## Circuit Wiring Instruction (step by step):
 
