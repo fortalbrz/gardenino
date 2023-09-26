@@ -50,8 +50,8 @@ Therefore, to use serial communication on this sketch to debug with "Serial Moni
 
 ### Configuration flags
   
-Use this configurations flags to set gardeino behaviour (if you wish). You can avoid dispensable hardware 
-and features to your needs...
+Use these configurations flags to set *gardeino* behaviour (as you wish). You can avoid dispensable hardware 
+and features to fit your needs...
 
 | macro                      | default | description                                                                       |
 |----------------------------|---------|-----------------------------------------------------------------------------------|
