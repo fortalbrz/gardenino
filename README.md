@@ -3,8 +3,11 @@
 
 **Optimized for NodeMCU 1.0 (ESP-12E Module)** 
 
-![logo](https://github.com/fortalbrz/gardenino/blob/main/logo.jpg?raw=true)
+<center>
 
+![logo](https://github.com/fortalbrz/gardenino/blob/main/img/logo.png?raw=true)
+
+</center>
 
 I made this project to make use of an old 8 chanels relay module with a low cost NodeMCU module... :smiley: 
 The goal is to control the garden watering, some decorative led lights, a couple of light flood, etc 
@@ -13,43 +16,44 @@ using [Home Assistant](https://home-assistant.io) with *MQTT* protocol (e.g., *m
 
  - **Video**: **[YouTube](https://youtu.be/8qxTY6HyU3Y)** [pt]
 
+<center>
 
-![figure1](https://github.com/fortalbrz/gardenino/blob/main/figure_001.png?raw=true)
+![figure1](https://github.com/fortalbrz/gardenino/blob/main/img/figure_01.png?raw=true)
 
-![figure2](https://github.com/fortalbrz/gardenino/blob/main/figure_002.png?raw=true)
+![figure2](https://github.com/fortalbrz/gardenino/blob/main/img/figure_02.png?raw=true)
 
-![figure3](https://github.com/fortalbrz/gardenino/blob/main/figure_003.png?raw=true)
+![figure3](https://github.com/fortalbrz/gardenino/blob/main/img/figure_03.png?raw=true)
 
+</center>
 
 
 ## Features:
  - works with Home Assistant to control garden watering and more 7 smart switches (MQTT), lights, *etc*
- - alternativelly, works autonomus with up to 200 programable timers (using real time clock - optional, use config flags)
- - soil moisture sensor to (avoids watering when the soil is wet - *optional, use [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
+ - soil moisture sensor (avoids watering when the soil is wet - *optional, use [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)
  - watering watchdog (prevents watering for long time... :potable_water: - *optional, see [config flags](https://github.com/fortalbrz/gardenino/blob/main/README.md#configuration-flags)*)   
 
 
 ## MQTT broker
 
-This project should communicate with a MQTT broker (e.g., mosquitto broker), ideally using [home assistant](https://home-assistant.io)
+This project should communicate with a MQTT broker (e.g., *mosquitto broker*), ideally using **[home assistant](https://home-assistant.io)**
 
-![communication diagram](https://github.com/fortalbrz/gardenino/blob/main/schema.png?raw=true)
+![mqtt diagram](https://github.com/fortalbrz/gardenino/blob/main/img/schema.png?raw=true)
 
 
 ## Source code:
- - [https://github.com/fortalbrz/gardenino](https://github.com/fortalbrz/gardenino)
+ - **https://github.com/fortalbrz/gardenino**
 
 
 ## Materials:
- - NodeMCU (ESP 8266-12e) [[25 BRL](https://produto.mercadolivre.com.br/MLB-1211973212-modulo-wifi-esp8266-nodemcu-esp-12e-_JM)]
- - relay module 5v 8-ch (optional: less that 8 channels can be used) [[35 BRL](https://produto.mercadolivre.com.br/LB-1758954385-modulo-rele-rele-5v-8-canais-para-arduino-pic-raspberry-pi-_JM)]
- - solenoid valve 3/4" 110 v (normaly closed) [[25 BRL](https://produto.mercadolivre.com.br/MLB-1511610317-valvula-solenoide-simples-entrada-agua-com-suporte-127v-220v-_JM)]
- - soil moisture sensor (optional: avoids watering when the soil is wet) [[9 BRL](https://www.a2robotics.com.br/sensor-de-umidade-do-solo-modulo-sonda-higrometro)]
- - power supply 5vdc (1A) [[14 BRL](https://produto.mercadolivre.com.br/MLB-3445635491-fonte-alimentaco-5v-1a-bivolt-roteador-wireles-modem-d-link-_JM)]
+ - NodeMCU (ESP 8266-12e) - [[25 BRL](https://produto.mercadolivre.com.br/MLB-1211973212-modulo-wifi-esp8266-nodemcu-esp-12e-_JM)]
+ - relay module 5v 8-ch (optional: less that 8 channels can be used) - [[35 BRL](https://produto.mercadolivre.com.br/LB-1758954385-modulo-rele-rele-5v-8-canais-para-arduino-pic-raspberry-pi-_JM)]
+ - solenoid valve 3/4" 110 v (normaly closed) - [[25 BRL](https://produto.mercadolivre.com.br/MLB-1511610317-valvula-solenoide-simples-entrada-agua-com-suporte-127v-220v-_JM)]
+ - soil moisture sensor (optional: avoids watering when the soil is wet) - [[9 BRL](https://www.a2robotics.com.br/sensor-de-umidade-do-solo-modulo-sonda-higrometro)]
+ - power supply 5vdc (1A) - [[14 BRL](https://produto.mercadolivre.com.br/MLB-3445635491-fonte-alimentaco-5v-1a-bivolt-roteador-wireles-modem-d-link-_JM)]
 
 *Others:*
- - 4 LED garden spike light (7w) [[69 BRL](https://produto.mercadolivre.com.br/MLB-1987365811-kit-4-luminaria-espeto-jardim-lmpada-cob-led-7w-luz-verde-_JM)]
- - led flood light 50w [[19 BRL](https://produto.mercadolivre.com.br/MLB-1703139744-refletor-holofote-led-50w-branco-frio-bivolt-6000k-_JM)]
+ - 4 LED garden spike light (7w) - [[69 BRL](https://produto.mercadolivre.com.br/MLB-1987365811-kit-4-luminaria-espeto-jardim-lmpada-cob-led-7w-luz-verde-_JM)]
+ - led flood light 50w - [[19 BRL](https://produto.mercadolivre.com.br/MLB-1703139744-refletor-holofote-led-50w-branco-frio-bivolt-6000k-_JM)]
 
 
 ## Circuit Wiring Instruction (step by step):
@@ -83,7 +87,7 @@ This project should communicate with a MQTT broker (e.g., mosquitto broker), ide
 
 The ESP-01 module should be programed with the sketch with the [Arduino IDE](https://www.arduino.cc/en/software):
   - go to File > Preferences
-  - on "Additonal boards manager", set the value "http://arduino.esp8266.com/stable/package_esp8266com_index.json"
+  - on "Additional boards manager", set the value "http://arduino.esp8266.com/stable/package_esp8266com_index.json"
   - go to Tools > Board > Board Manager
   - search for “**ESP8266**”
   - install the ESP8266 Community package ("**esp8266**" by *ESP8266 Community*)//   
