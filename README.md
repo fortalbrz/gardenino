@@ -24,6 +24,8 @@ using [Home Assistant](https://home-assistant.io) with *MQTT* protocol (e.g., *m
 
 ![figure3](https://github.com/fortalbrz/gardenino/blob/main/img/figure_03.png?raw=true)
 
+![figure4](https://github.com/fortalbrz/gardenino/blob/main/img/figure_04.png?raw=true)
+
 </center>
 
 
