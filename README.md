@@ -9,7 +9,7 @@
 
 </center>
 
-I made this project to make use of an old 8 chanels relay module with a low cost NodeMCU module... :smiley: 
+I made this project to make use of an old 8 channels relay module with a low cost NodeMCU module... :smiley: 
 The goal is to control the garden watering, some decorative led lights, a couple of light flood, etc 
 using [Home Assistant](https://home-assistant.io) with *MQTT* protocol (e.g., *mosquitto broker*).
 
@@ -47,11 +47,14 @@ This project should communicate with a MQTT broker (e.g., *mosquitto broker*), i
 
 
 ## Materials:
- - NodeMCU (ESP 8266-12e) - [[25 BRL](https://produto.mercadolivre.com.br/MLB-1211973212-modulo-wifi-esp8266-nodemcu-esp-12e-_JM)]
- - relay module 5v 8-ch (optional: less that 8 channels can be used) - [[35 BRL](https://produto.mercadolivre.com.br/LB-1758954385-modulo-rele-rele-5v-8-canais-para-arduino-pic-raspberry-pi-_JM)]
- - solenoid valve 3/4" 110 v (normaly closed) - [[25 BRL](https://produto.mercadolivre.com.br/MLB-1511610317-valvula-solenoide-simples-entrada-agua-com-suporte-127v-220v-_JM)]
- - soil moisture sensor (optional: avoids watering when the soil is wet) - [[9 BRL](https://www.a2robotics.com.br/sensor-de-umidade-do-solo-modulo-sonda-higrometro)]
- - power supply 5vdc (1A) - [[14 BRL](https://produto.mercadolivre.com.br/MLB-3445635491-fonte-alimentaco-5v-1a-bivolt-roteador-wireles-modem-d-link-_JM)]
+ - 1 x NodeMCU (ESP 8266-12e) - [[25 BRL](https://produto.mercadolivre.com.br/MLB-1211973212-modulo-wifi-esp8266-nodemcu-esp-12e-_JM)]
+ - 1 x relay module 5v 8-ch (optional: less that 8 channels can be used) - [[35 BRL](https://produto.mercadolivre.com.br/LB-1758954385-modulo-rele-rele-5v-8-canais-para-arduino-pic-raspberry-pi-_JM)]
+ - 1 x solenoid valve 3/4" 110 v (normally closed) - [[25 BRL](https://produto.mercadolivre.com.br/MLB-1511610317-valvula-solenoide-simples-entrada-agua-com-suporte-127v-220v-_JM)]
+ - 1 x soil moisture sensor (optional: avoids watering when the soil is wet) - [[9 BRL](https://www.a2robotics.com.br/sensor-de-umidade-do-solo-modulo-sonda-higrometro)]
+ - 1 x power supply 5vdc (1A) - [[14 BRL](https://produto.mercadolivre.com.br/MLB-3445635491-fonte-alimentaco-5v-1a-bivolt-roteador-wireles-modem-d-link-_JM)]
+ - 1 x led and resistor 10k ohms (optional, indicates "power on")
+ - 1 x electrolytic capacitor 100 uF (optional)
+ - flexible cab (22 agw)
 
 *Others:*
  - 4 LED garden spike light (7w) - [[69 BRL](https://produto.mercadolivre.com.br/MLB-1987365811-kit-4-luminaria-espeto-jardim-lmpada-cob-led-7w-luz-verde-_JM)]
@@ -61,7 +64,7 @@ This project should communicate with a MQTT broker (e.g., *mosquitto broker*), i
 ## Circuit Wiring Instruction (step by step):
 
 
-![project resources](https://github.com/fortalbrz/gardenino/blob/main/wiring_diagram.png?raw=true)
+![project resources](https://github.com/fortalbrz/gardenino/blob/main/img/wiring_diagram.png?raw=true)
 
 [[wiring diagram](https://www.circuito.io/app?components=513,13322,360216,442979)]:
   - NodeMCU (GND) -> power supply 5vdc (negative/Gnd)
@@ -79,6 +82,11 @@ This project should communicate with a MQTT broker (e.g., *mosquitto broker*), i
   - Soil moisture sensor VIN (right) -> NodeMCU (3.3v)
   - Soil moisture sensor GND (center) -> power supply 5vdc (negative/Gnd)
   - Soil moisture sensor SIG/A0 (left) -> NodeMCU (A0)
+  - Led terminal 1 (positive) -> +5 V power source (VCC) (optional, "power on led")
+  - Led terminal 2 (negative/bevel) -> resistor 10k olhms "D" terminal 1 (optional, "power on led")
+  - resistor 10k olhms "D" terminal 2 -> -5 V power source (GND) (optional, "power on led")
+  - capacitor 100uF (positive) -> +5 V power source (VCC) (optional)
+  - capacitor 100uF (negative/"minus sign") -> resistor 10k olhms "D" terminal 2 (optional)
 
 
 ## Flashing the code
@@ -91,20 +99,20 @@ The ESP-01 module should be programed with the sketch with the [Arduino IDE](htt
   - go to File > Preferences
   - on "Additional boards manager", set the value "http://arduino.esp8266.com/stable/package_esp8266com_index.json"
   - go to Tools > Board > Board Manager
-  - search for “**ESP8266**”
+  - search for "**ESP8266**"
   - install the ESP8266 Community package ("**esp8266**" by *ESP8266 Community*)//   
-  - select board "**NodeMCU 1.0 (ESP-12E Module)**" and connected COM port (checks the Windows "device manager")
-
+  - select board "**NodeMCU 1.0 (ESP-12E Module)**" and connected COM port (checks at Windows "device manager")
+  - select Sketch > Upload
 
 ## Home Assistant Configuration
 
-Adds the line on configuration.yaml: 
+Adds the line on *configuration.yaml*: 
 
 
      mqtt: !include mqtt.yaml
 
 
-And creates a file "[mqtt.yaml](https://github.com/fortalbrz/gardenino/blob/main/mqtt.yaml)" as follow:
+And creates a file "*[mqtt.yaml](https://github.com/fortalbrz/gardenino/blob/main/mqtt.yaml)*" as follow:
 
 
     - sensor:
