@@ -25,11 +25,14 @@
 //   - https://github.com/fortalbrz/gardenino
 //
 //   Materials:
-//   - NodeMCU (ESP 8266-12e) [25 BRL](https://produto.mercadolivre.com.br/MLB-1211973212-modulo-wifi-esp8266-nodemcu-esp-12e-_JM)
-//   - relay module 5v 8-ch (optional: less that 8 channels can be used) [35 BRL](https://produto.mercadolivre.com.br/MLB-1758954385-modulo-rele-rele-5v-8-canais-para-arduino-pic-raspberry-pi-_JM)
-//   - solenoid valve 3/4" 110 v (normaly closed) [25 BRL](https://produto.mercadolivre.com.br/MLB-1511610317-valvula-solenoide-simples-entrada-agua-com-suporte-127v-220v-_JM)
-//   - soil moisture sensor (optional: avoids watering when the soil is wet) [9 BRL](https://www.a2robotics.com.br/sensor-de-umidade-do-solo-modulo-sonda-higrometro)
-//   - power supply 5vdc (1A) [14 BRL](https://produto.mercadolivre.com.br/MLB-3445635491-fonte-alimentaco-5v-1a-bivolt-roteador-wireles-modem-d-link-_JM)
+//   - 1 x NodeMCU (ESP 8266-12e) [25 BRL](https://produto.mercadolivre.com.br/MLB-1211973212-modulo-wifi-esp8266-nodemcu-esp-12e-_JM)
+//   - 1 x relay module 5v 8-ch (optional: less that 8 channels can be used) [35 BRL](https://produto.mercadolivre.com.br/MLB-1758954385-modulo-rele-rele-5v-8-canais-para-arduino-pic-raspberry-pi-_JM)
+//   - 1 x solenoid valve 3/4" 110 v (normaly closed) [25 BRL](https://produto.mercadolivre.com.br/MLB-1511610317-valvula-solenoide-simples-entrada-agua-com-suporte-127v-220v-_JM)
+//   - 1 x soil moisture sensor (optional: avoids watering when the soil is wet) [9 BRL](https://www.a2robotics.com.br/sensor-de-umidade-do-solo-modulo-sonda-higrometro)
+//   - 1 x power supply 5vdc (1A) [14 BRL](https://produto.mercadolivre.com.br/MLB-3445635491-fonte-alimentaco-5v-1a-bivolt-roteador-wireles-modem-d-link-_JM)
+//   - 1 x led and resistor 10k olhms (optional, indicates "power on")
+//   - 1 x electrolytic capacitor 100 uF (optional)
+//   - flexible cab (22 agw)
 //
 //   Others:
 //   - kit 4 LED garden spike light (7w) [69 BRL](https://produto.mercadolivre.com.br/MLB-1987365811-kit-4-luminaria-espeto-jardim-lmpada-cob-led-7w-luz-verde-_JM)
@@ -51,6 +54,11 @@
 //      - Soil moisture sensor VIN (right) --> NodeMCU (3.3v)
 //      - Soil moisture sensor GND (center) --> power supply 5vdc (negative/Gnd)
 //      - Soil moisture sensor SIG/A0 (left) --> NodeMCU (A0)
+//      - Led terminal 1 (positive) --> +5 V power source (VCC) (optional, "power on led")
+//      - Led terminal 2 (negative/bevel) --> resistor 10k olhms "D" terminal 1 (optional, "power on led")
+//      - resistor 10k olhms "D" terminal 2 --> -5 V power source (GND) (optional, "power on led")
+//      - capacitor 100uF (positive) --> +5 V power source (VCC) (optional)
+//      - capacitor 100uF (negative/"minus sign") --> resistor 10k olhms "D" terminal 2 (optional)
 //
 //   Flashing the code:
 //
@@ -58,19 +66,25 @@
 //    - CH340g USB/Serial driver (windows 11 compatible driver): https://bit.ly/44WdzVF 
 //    - driver install instructions (pt): https://bit.ly/3ZqIqc0
 //   
-//   The ESP-01 module should be programed with the sketch with the [Arduino IDE](https://www.arduino.cc/en/software) 
+//   The NodeMCU module should be programed with the sketch with the [Arduino IDE](https://www.arduino.cc/en/software) 
 //    - go to File > Preferences
 //    - on "Additonal boards manager", set the value "http://arduino.esp8266.com/stable/package_esp8266com_index.json"
 //    - go to Tools > Board > Board Manager
 //    - search for “ESP8266”
 //    - install the ESP8266 Community package ("esp8266" by ESP8266 Community)//   
-//    - select board "NodeMCU 1.0 (ESP-12E Module)" and coonected COM port (checks the Windows "device manager")
+//    - select board "NodeMCU 1.0 (ESP-12E Module)" and coonected COM port (checks at Windows "device manager")
+//    - select "Sketch" > "Upload"
+//
+//   Wiring Testing:
+//   sets the macro "WIRING_TEST_MODE" as true in order to check relays and sensor connections (testing only)
+//
+//   Serial Monitor:
+//   sets the macro "DEBUG_MODE" as true in order to debug on serial monitor (testing only) - ensure the baud rate setup!
 //
 //   MQTT topics:
 //    - gardenino/available: sensors availability ["online"/"offline"]
 //    - gardenino/cmd: pushes commands to NodeMCU [home assistant -> gardenino]:
 //         "watering": watering for 5 min (turn on/off sonenoid valve, i.e. relay #1)
-//         "light on/off": turns on/off the garden decorative led lights (i.e. relay #2)
 //         "light on/off": turns on/off the garden decorative led lights (i.e. relay #2)
 //         "light flood 1 on/off": turn on/of the 1st light flood (i.e. relay #3)
 //         "light flood 2 on/off": turn on/of the 2nd light flood (i.e. relay #4)
@@ -92,7 +106,7 @@
 //            "watchdog": "on",    // watering watchdog enabled: [on/off]
 //            "moisture": 91,      // soil moisture, as percentage [0-100]
 //            "cond": 84,          // soil conductivity [0-1024]
-//            "soil": "wet"}       // soil state: [dry/ok/wet]
+//            "soil": "wet"        // soil state: [dry/ok/wet]
 //         } 
 //
 // Configuration flags:
@@ -107,14 +121,16 @@
 // Option flags:
 //   - USE_WATERING_WATCHDOG: enables a watering time limit (watering watchdog), false otherwise (default: true)
 //   - USE_MOISTURE_SENSOR: enables the moisture sensor, false otherwise - set false if the moisture sensor is not needed (default: true)
-//   - USE_BUILDIN_BLINKING_LED: set true to use disable Relay #8 and use NodeMCU D4 as blinking led, false otherwise (default: false)
+//   - USE_BUILTIN_BLINKING_LED: set true to use disable Relay #8 and use NodeMCU D4 as blinking led, false otherwise (default: false)
 //
 // Debug flags:
 //   - DEBUG_MODE: enables/disables serial monitor debugging messages
 //   - WIRING_TEST_MODE: enables/disables a wiring test mode
 //
+//------------------------------------------------------------------------------------------------------------------
 //
 //   Jorge Albuquerque (2024) - https://linkedin.com/in/jorgealbuquerque
+//   https://www.jorgealbuquerque.com
 //
 //------------------------------------------------------------------------------------------------------------------
 #define DEBUG_MODE false                  // enables/disables serial debugging messages
@@ -122,7 +138,7 @@
 //------------------------------------------------------------------------------------------------------------------
 #define USE_WATERING_WATCHDOG true        // true to set a watering time limit, false otherwise (default: true)
 #define USE_MOISTURE_SENSOR true          // true to use moisture sensor, false otherwise - dont need the moisture sensor (default: true)
-#define USE_BUILDIN_BLINKING_LED false    // true to use disable Relay #8 and use NodeMCU D4 as blinking led, false otherwise
+#define USE_BUILTIN_BLINKING_LED false    // true to use disable Relay #8 and use NodeMCU D4 as blinking led, false otherwise
 //------------------------------------------------------------------------------------------------------------------
 //
 // Configuration flags (enables or disables features in order to "skip" unwanted hardware)
@@ -293,7 +309,7 @@ void loop() {
   //
   // main loop
   //  
-  #if (USE_BUILDIN_BLINKING_LED == true)
+  #if (USE_BUILTIN_BLINKING_LED == true)
     digitalWrite(BUILTIN_LED, (_blink ? LOW : HIGH));
     _blink = !_blink;
   #endif
@@ -568,7 +584,7 @@ void setRelay(const unsigned int& index, bool state) {
   if (RELAY_STATES[index] == state)
     return;
 
-  #if (USE_BUILDIN_BLINKING_LED == true)
+  #if (USE_BUILTIN_BLINKING_LED == true)
     if (index == RELAY_SIZE - 1)
       // do not use last relay (if allocated to buildin led - D4)
       return;
